@@ -188,10 +188,7 @@ class RSSParser {
 	*/
 	function getFeed($num)
 	{
-		if (!$this->data)
-		{
-			$this->parse();
-		}
+		$this->parse();
 			
 		$c = 0;
 		$return = array();
