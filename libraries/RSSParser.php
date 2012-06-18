@@ -169,6 +169,7 @@ class RSSParser {
 	function set_cache_life($period = NULL)
 	{
 		$this->cache_life = $period;
+		return $this;
 	}
 
 	// --------------------------------------------------------------------
@@ -176,6 +177,7 @@ class RSSParser {
 	function set_feed_url($url = NULL)
 	{
 		$this->feed_uri = $url;
+		return $this;
 	}
 
 	// --------------------------------------------------------------------
