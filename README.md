@@ -34,6 +34,25 @@ $this->rssparser->set_feed_url('http://example.com/feed')->set_cache_life(30)->g
 Example
 ----------------------------
 
+Getting RSS from a single source.
+
+```php
+function get_ars() 
+{
+	// Load RSS Parser
+	$this->load->library('rssparser');
+	
+	// Get 6 items from arstechnica
+	$rss = $this->rssparser->set_feed_url('http://feeds.arstechnica.com/arstechnica/index/')->set_cache_life(30)->getFeed(6);
+
+	foreach ($rss as $item)
+	{
+		echo $item['title'];
+		echo $item['description'];
+	}
+}
+```
+
 Getting RSS from multiple sources.
 
 ```php
@@ -56,6 +75,7 @@ function get_logistics_news()
 	}
 }
 ```
+
 
 Misc
 ----------------------------
