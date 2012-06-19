@@ -25,25 +25,22 @@
 
 class RSSParser {
 
-	var $feed_uri = NULL; // Feed URI
-	var $data = FALSE; // Associative array containing all the feed items
-	var $channel_data = array(); // Store RSS Channel Data in an array
-	var $feed_unavailable; // Boolean variable which indicates whether an RSS feed was unavailable
-	var $cache_life = 0; // Cache lifetime
-	var $cache_dir = './application/cache/'; // Cache directory
-	var $write_cache_flag = FALSE; // Flag to write to cache - defaulted to false
-	var $callback = FALSE; // Callback to read custom data
+	public $feed_uri 			= NULL; 					// Feed URI
+	public $data 				= FALSE; 					// Associative array containing all the feed items
+	public $channel_data 		= array(); 					// Store RSS Channel Data in an array
+	public $feed_unavailable	= NULL; 					// Boolean variable which indicates whether an RSS feed was unavailable
+	public $cache_life 			= 0; 						// Cache lifetime
+	public $cache_dir 			= './application/cache/'; 	// Cache directory
+	public $write_cache_flag 	= FALSE; 					// Flag to write to cache
+	public $callback 			= FALSE; 					// Callback to read custom data
+	
 
-	function RSSParser($callback = FALSE)
+	function __construct($callback = FALSE)
 	{
 		if ($callback)
 		{
 			$this->callback = $callback;
 		}
-		
-		$this->current_feed['title'] = '';
-		$this->current_feed['description'] = '';
-		$this->current_feed['link'] = '';
 	}
 
 	// --------------------------------------------------------------------
@@ -79,9 +76,6 @@ class RSSParser {
 		}
 
 		// Reset
-		$this->current_feed['title'] = '';
-		$this->current_feed['description'] = '';
-		$this->current_feed['link'] = '';
 		$this->data = array();
 		$this->channel_data = array();
 
