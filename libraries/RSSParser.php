@@ -23,6 +23,7 @@
 	}
 */
 
+
 class RSSParser {
 
 	public $feed_uri 			= NULL; 					// Feed URI
