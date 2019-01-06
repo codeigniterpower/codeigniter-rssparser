@@ -1,4 +1,4 @@
-RSSParser library - Production ready - CI 2.1.0 compatible
+RSSParser library - Production ready - CI 3.1.9 compatible
 ====================================================================
 
 Install
