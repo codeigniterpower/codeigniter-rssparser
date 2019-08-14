@@ -34,7 +34,7 @@ class RSSParser {
 	public $cache_dir 			= './application/cache/'; 	// Cache directory
 	public $write_cache_flag 	= FALSE; 					// Flag to write to cache
 	public $callback 			= FALSE; 					// Callback to read custom data
-	
+
 
 	function __construct($callback = FALSE)
 	{
@@ -83,10 +83,38 @@ class RSSParser {
 		// Parse the document
 		if (!isset($rawFeed))
 		{
-			$rawFeed = file_get_contents($this->feed_uri);
+			// If fopen is enabled
+			if($content = @file_get_contents($this->feed_uri))
+      {
+          $rawFeed = $content;
+      }
+      else
+      {
+          $ch = curl_init();
+
+          curl_setopt($ch, CURLOPT_URL, $this->feed_uri);
+          curl_setopt($ch, CURLOPT_HEADER, false);
+          curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+
+          $content = curl_exec($ch);
+          $error = curl_error($ch);
+
+          curl_close($ch);
+
+          if(empty($error))
+          {
+              $rawFeed = $content;
+          }
+          else
+          {
+              throw new Exception("Erroe occured while loading url by cURL. <br />\n" . $error) ;
+              return false;
+          }
+      }
 		}
 
-		$xml = new SimpleXmlElement($rawFeed);
+		if(isset($rawFeed))
+			$xml = new SimpleXmlElement($rawFeed);
 
 		if ($xml->channel)
 		{
@@ -104,12 +132,12 @@ class RSSParser {
 				$data['link'] = (string)$item->link;
 				$dc = $item->children('http://purl.org/dc/elements/1.1/');
 				$data['author'] = (string)$dc->creator;
-				
+
 				if ($this->callback)
 				{
 					$data = call_user_func($this->callback, $data, $item);
 				}
-				
+
 				$this->data[] = $data;
 			}
 		}
@@ -130,12 +158,12 @@ class RSSParser {
 				$data['link'] = (string)$item->link['href'];
 				$dc = $item->children('http://purl.org/dc/elements/1.1/');
 				$data['author'] = (string)$dc->creator;
-				
+
 				if ($this->callback)
 				{
 					$data = call_user_func($this->callback, $data, $item);
 				}
-					
+
 				$this->data[] = $data;
 			}
 		}
@@ -184,7 +212,7 @@ class RSSParser {
 	function getFeed($num)
 	{
 		$this->parse();
-			
+
 		$c = 0;
 		$return = array();
 
@@ -227,8 +255,8 @@ class RSSParser {
 	}
 
 	// --------------------------------------------------------------------
-	
-	/* Initialize the feed data */ 
+
+	/* Initialize the feed data */
 	function clear()
 	{
 		$this->feed_uri		= NULL;
@@ -236,7 +264,7 @@ class RSSParser {
 		$this->channel_data	= array();
 		$this->cache_life	= 0;
 		$this->callback		= FALSE;
-		
+
 		return $this;
 	}
 }
